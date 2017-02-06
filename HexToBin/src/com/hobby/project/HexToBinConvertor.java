@@ -223,11 +223,9 @@ public class HexToBinConvertor {
 				shrtOpt += ":";
 			}
 		}
-		/* creating an array of long opts */
-		LongOpt[] lg = new LongOpt[lngOpt.size()];
-		lngOpt.toArray(lg);
-
-		Getopt gt = new Getopt("IntelHexToBin", args, shrtOpt, lg);
+		
+		
+		Getopt gt = new Getopt("IntelHexToBin", args, shrtOpt, new LongOpt[lngOpt.size()]);
 		/* print usage doc for no arguments from the user */
 		if (args.length < 1) {
 			usageDoc();
