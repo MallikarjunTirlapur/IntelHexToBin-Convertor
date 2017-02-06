@@ -210,17 +210,17 @@ public class HexToBinConvertor {
 		HexToBinConvertor hTb = new HexToBinConvertor();
 
 		/* the vector of list of valid long options */
-		Vector<LongOpt> lngOpt = new Vector<>();
-		lngOpt.add(new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'));
-		lngOpt.add(new LongOpt("hexfile", LongOpt.REQUIRED_ARGUMENT, null, 'i'));
-		lngOpt.add(new LongOpt("binfile", LongOpt.REQUIRED_ARGUMENT, null, 'o'));
-		lngOpt.add(new LongOpt("start address", LongOpt.REQUIRED_ARGUMENT, null, 's'));
-		lngOpt.add(new LongOpt("end address", LongOpt.REQUIRED_ARGUMENT, null, 'e'));
+		LongOpt[] lgOt = new LongOpt[5];
+		lgOt[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h');
+		lgOt[1] = new LongOpt("hexfile", LongOpt.REQUIRED_ARGUMENT, null, 'i');
+		lgOt[2] = new LongOpt("binfile", LongOpt.REQUIRED_ARGUMENT, null, 'o');
+		lgOt[3] = new LongOpt("start address", LongOpt.REQUIRED_ARGUMENT, null, 's');
+		lgOt[4] = new LongOpt("end address", LongOpt.REQUIRED_ARGUMENT, null, 'e');
 
-		for (LongOpt xyz : lngOpt) {
-			shrtOpt += (char) xyz.getVal();
-			if (xyz.getHasArg() == LongOpt.REQUIRED_ARGUMENT) {
-				shrtOpt += ":";
+		for (LongOpt lg : lgOt) {
+			stOt += (char) lg.getVal();
+			if (lg.getHasArg() == LongOpt.REQUIRED_ARGUMENT) {
+				stOt += ":";
 			}
 		}
 		
