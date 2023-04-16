@@ -41,8 +41,8 @@ import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
 /**
- * Class reads the hex file from the given path, process the hex and writes the
- * converted binary in to the file at a location provided by the user.
+ * Class reads the hex file from a given path, processes hex and writes
+ * converted binary in to a file at a location provided by the user.
  *
  * @author Mallikarjun Tirlapur
  */
@@ -73,9 +73,8 @@ public class HexToBinConvertor {
 			linTbl.put(i, line);
 		}
 
-		/* process all the lines to get the bin data */
+		/* process all the lines to get bin data */
 		dataAddressHashMap = lnPrsr.processRecord(linTbl);
-
 	}
 
 	/**
@@ -93,6 +92,13 @@ public class HexToBinConvertor {
 	private void writeBin(String outPath, long strtAddrs, long endAdds) throws IOException {
 		byte[] buffer;
 		File fl = new File(outPath);
+		
+		/* create a new file if it does't exist already */
+		fl.getParentFile().mkdirs();
+		fl.createNewFile();
+
+		/* write data into the file */
+		DataOutputStream os = new DataOutputStream(new FileOutputStream(outPath));
 
 		/* get all the keys(address) from the hash table */
 		Set<Long> keys = dataAddressHashMap.keySet();
@@ -104,46 +110,45 @@ public class HexToBinConvertor {
 		long buffSize = ((Long) arr[arr.length - 1] - (Long) arr[0])
 				+ (dataAddressHashMap.get(arr[arr.length - 1]).length() / 2);
 
-		/* craete a buffer */
-		buffer = new byte[(int) buffSize];
-
-		/* fill the buffer with 0xff (NOPs) */
-		Arrays.fill(buffer, (byte) 0xff);
-
 		for (long recAddrs : keys) {
 			/* get the associated data for the key (address) */
 			byte[] data = getBytes(dataAddressHashMap.get(recAddrs));
 
+			/* craete a buffer */
+			buffer = new byte[(int) data.length];
+
+			/* fill the buffer with 0xff (NOPs) */
+			Arrays.fill(buffer, (byte) 0xff);
+			
 			if (endAdds != 0) {
 				/*
 				 * skip the loading if address won't lie with in the start end
 				 * address boundaries
 				 */
-				if ((recAddrs >= strtAddrs) && ((recAddrs + data.length) < endAdds)) {
+				if ((recAddrs >= strtAddrs) && ((recAddrs + data.length) <= endAdds)) {
 					/*
 					 * load buffer with the data when given end address from the
 					 * user is not 0
 					 */
-					System.arraycopy(data, 0, buffer, (int) (recAddrs - strtAddrs), data.length);
+					System.arraycopy(data, 0, buffer, 0, data.length);
+				}
+				else
+				{
+					break;
 				}
 			} else {
 				/*
 				 * load buffer with the data when given end address from the
 				 * user is 0
 				 */
-				System.arraycopy(data, 0, buffer, (int) (recAddrs - (Long) arr[0]), data.length);
+				System.arraycopy(data, 0, buffer, 0, data.length);
 			}
+			os.write(buffer);
 		}
 
-		/* create a new file if it does't exist already */
-		fl.getParentFile().mkdirs();
-		fl.createNewFile();
-
-		/* write data into the file */
-		DataOutputStream os = new DataOutputStream(new FileOutputStream(outPath));
-		os.write(buffer);
 		os.close();
 
+		
 		/* print start address, end address and total number of bytes */
 		if (endAdds != 0) {
 			System.out.print("Start Address: " + strtAddrs);
@@ -178,7 +183,7 @@ public class HexToBinConvertor {
 		strbldr.append("\n");
 		strbldr.append("The command line tool efficiently converts Intel format .hex file to .bin file \n");
 		strbldr.append(
-				"with the right xommand line arguments as shown below. For more info please visit my github page at ...link \n);"
+				"with the right command line arguments as shown below. For more info please visit my github page at ...link \n);"
 						+ "Moreover, the source code is made public and accessible at \n");
 		strbldr.append("....................link............................................................ \n");
 		strbldr.append("Usage: \n");
@@ -206,7 +211,7 @@ public class HexToBinConvertor {
 		long endAddrs = 0;
 		String hexPath = "";
 		String binPath = "";
-		String shrtOpt = "";
+		String stOt = "";
 		HexToBinConvertor hTb = new HexToBinConvertor();
 
 		/* the vector of list of valid long options */
@@ -224,8 +229,7 @@ public class HexToBinConvertor {
 			}
 		}
 		
-		
-		Getopt gt = new Getopt("IntelHexToBin", args, shrtOpt, new LongOpt[lngOpt.size()]);
+		Getopt gt = new Getopt("IntelHexToBin", args, stOt, new LongOpt[lgOt.length]);
 		/* print usage doc for no arguments from the user */
 		if (args.length < 1) {
 			usageDoc();
@@ -275,7 +279,7 @@ public class HexToBinConvertor {
 		try {
 			hTb.readHex(hexPath);
 			hTb.writeBin(binPath, strtAddrs, endAddrs);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.print("File access failed!!!!!provide a vaild input/output path");
 		}
 	}

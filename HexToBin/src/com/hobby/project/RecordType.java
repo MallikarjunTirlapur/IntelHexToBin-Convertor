@@ -30,7 +30,7 @@ package com.hobby.project;
  * @author Mallikarjun Tirlapur
  */
 public class RecordType {
-	/* Different Record types as per the spec */
+	/* Different Record types of the intel hex format */
 	public final static int DataRecord = 0x00;
 	public final static int EndOfFile = 0x01;
 	public final static int ExtendedSegAddress = 0x02;

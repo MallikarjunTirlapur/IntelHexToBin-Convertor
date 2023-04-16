@@ -59,57 +59,55 @@ public class LineParser {
 			 * instance of record which holds current data in the record fields
 			 */
 			Record parsedLine = parseRecord(lnTbl.get(key));
-			if (parsedLine != null) {
-				switch (parsedLine.recTyp) {
-				case RecordType.DataRecord:
-					/*
-					 * the data filed of DataRecord record specifies the binary
-					 * data and load offset specifies memory load address
-					 */
-					addDataMap.put((upperBaseAddress | Long.parseLong(parsedLine.loadOffset, 16)),
-							parsedLine.dataBytes);
-					break;
+			if (parsedLine == null) {
+				continue;
+			}
+			switch (parsedLine.recTyp) {
+			case RecordType.DataRecord:
+				/*
+				 * the data filed of DataRecord record specifies the binary
+				 * data and load offset specifies memory load address
+				 */
+				addDataMap.put((upperBaseAddress | Long.parseLong(parsedLine.loadOffset, 16)),
+						parsedLine.dataBytes);
+				break;
 
-				case RecordType.ExtendedLinearAddress:
-					/*
-					 * the data filed of ELA record specifies the upper 16 bits
-					 * of the LBA
-					 */
-					upperBaseAddress = Long.parseLong(parsedLine.dataBytes, 16);
-					upperBaseAddress <<= 16;
-					break;
+			case RecordType.ExtendedLinearAddress:
+				/*
+				 * the data filed of ELA record specifies the upper 16 bits
+				 * of the LBA
+				 */
+				upperBaseAddress = Long.parseLong(parsedLine.dataBytes, 16);
+				upperBaseAddress <<= 16;
+				break;
 
-				case RecordType.ExtendedSegAddress:
-					/*
-					 * the data filed of ESA record specifies the bits 4 - 19 of
-					 * the SBA
-					 */
-					upperBaseAddress = Long.parseLong(parsedLine.dataBytes, 16);
-					upperBaseAddress <<= 4;
-					break;
+			case RecordType.ExtendedSegAddress:
+				/*
+				 * the data filed of ESA record specifies the bits 4 - 19 of
+				 * the SBA
+				 */
+				upperBaseAddress = Long.parseLong(parsedLine.dataBytes, 16);
+				upperBaseAddress <<= 4;
+				break;
 
-				case RecordType.StartLinearAddress:
-					/*
-					 * the data filed of SLA record specifies the execution
-					 * start address
-					 */
-					StartAddress = Long.parseLong(parsedLine.dataBytes, 16);
-					break;
+			case RecordType.StartLinearAddress:
+				/*
+				 * the data filed of SLA record specifies the execution
+				 * start address
+				 */
+				StartAddress = Long.parseLong(parsedLine.dataBytes, 16);
+				break;
 
-				case RecordType.StartSegAddress:
-					/*
-					 * the data filed of SSA record specifies the the execution
-					 * start address for the object file
-					 */
-					StartAddress = Long.parseLong(parsedLine.dataBytes, 16);
-					break;
+			case RecordType.StartSegAddress:
+				/*
+				 * the data filed of SSA record specifies the the execution
+				 * start address for the object file
+				 */
+				StartAddress = Long.parseLong(parsedLine.dataBytes, 16);
+				break;
 
-				case RecordType.EndOfFile:
-					break;
-				}
-
-			} else {
-				System.out.print("Checksum Failed!!!load valid hex file");
+			case RecordType.EndOfFile:
+				break;
 			}
 		}
 		/* linked hash table */
