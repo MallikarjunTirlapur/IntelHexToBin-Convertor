@@ -182,10 +182,10 @@ public class HexToBinConvertor {
 		StringBuilder strbldr = new StringBuilder();
 		strbldr.append("\n");
 		strbldr.append("The command line tool efficiently converts Intel format .hex file to .bin file \n");
-		strbldr.append(
-				"with the right command line arguments as shown below. For more info please visit my github page at ...link \n);"
-						+ "Moreover, the source code is made public and accessible at \n");
-		strbldr.append("....................link............................................................ \n");
+		strbldr.append("with the right command line arguments as shown below. For more info please visit my github page at \n");
+		strbldr.append("https://mallikarjuntirlapur.github.io/IntelHexToBin \n");			
+		strbldr.append("Moreover, the source code is made public and accessible at \n");
+		strbldr.append("https://github.com/MallikarjunTirlapur/IntelHexToBin-Convertor \n");
 		strbldr.append("Usage: \n");
 		strbldr.append("IntelHexToBin <option> .hex <option> .bin <option> 0xYYYY <option> 0xZZZZ \n");
 		strbldr.append("options: \n");
